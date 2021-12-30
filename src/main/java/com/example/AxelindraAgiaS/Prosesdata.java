@@ -21,38 +21,29 @@ public class Prosesdata {
     
     @RequestMapping("/prosesinput")
     public String inputanuser(HttpServletRequest data, Model buah){
-        String nbuah = data.getParameter("var_namabuah");
-        String hbuah = data.getParameter("var_hargakilo");
-        Integer chbuah = Integer.valueOf(hbuah);
-        String jbuah = data.getParameter("var_jumlahbeli");
-        Double cjbuah = Double.valueOf(jbuah);
-        Double jumlahbayar = chbuah * cjbuah;
-        Double totalbayar = null;
-        Integer diskon = 0;
-        Double hargadiskon = 0.0;
+        Prosesdatapt2 pdata2 = new Prosesdatapt2();
+        //getting data
+        String namabuah = data.getParameter("var_namabuah");
+        String hargabuah = data.getParameter("var_hargakilo");
+        String jumlahbuah = data.getParameter("var_jumlahbeli");
+        //import data from process to variabel
         
-        if(jumlahbayar < 16000){
-            totalbayar = jumlahbayar - (jumlahbayar*diskon/100);
-            hargadiskon = jumlahbayar*diskon/100;
-            
-        }else if(jumlahbayar < 25000){
-            diskon = 10;
-            totalbayar = jumlahbayar - (jumlahbayar*diskon/100);
-            hargadiskon = jumlahbayar*diskon/100;
-            
-        }else{
-            diskon = 15;
-            totalbayar = jumlahbayar - (jumlahbayar*diskon/100);
-            hargadiskon = jumlahbayar*diskon/100;
-        }
-        buah.addAttribute("name", nbuah);
-        buah.addAttribute("price", chbuah);
-        buah.addAttribute("kilo", cjbuah);
+        Double convharga        = pdata2.newharga(hargabuah);
+        Double convjumlah       = pdata2.newjumlah(jumlahbuah);
+        Double jumlahbayar      = pdata2.newjumlahbayar(convharga, convjumlah);
+        String diskonpersen     = pdata2.diskon(jumlahbayar);
+        Double hargadiskon      = pdata2.newhargadiskon(jumlahbayar, Integer.valueOf(diskonpersen));
+        Double totalbayar       = pdata2.newtotalbayar(jumlahbayar, hargadiskon);
+        pdata2.math(jumlahbayar, Integer.SIZE, totalbayar, hargadiskon);
+        //
+        buah.addAttribute("name", namabuah);
+        buah.addAttribute("price", totalbayar);
+        buah.addAttribute("kilo", jumlahbuah);
         buah.addAttribute("tbayar", totalbayar);
         buah.addAttribute("discountrp", hargadiskon);
-        buah.addAttribute("disc", diskon);
+        buah.addAttribute("disc", diskonpersen);
         buah.addAttribute("total0", jumlahbayar);
         return "Axelindraagia";
-    }
+    }  
     
 }
