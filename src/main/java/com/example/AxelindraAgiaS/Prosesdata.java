@@ -37,7 +37,7 @@ public class Prosesdata {
         pdata2.math(jumlahbayar, Integer.SIZE, totalbayar, hargadiskon);
         //
         buah.addAttribute("name", namabuah);
-        buah.addAttribute("price", totalbayar);
+        buah.addAttribute("price", hargabuah);
         buah.addAttribute("kilo", jumlahbuah);
         buah.addAttribute("tbayar", totalbayar);
         buah.addAttribute("discountrp", hargadiskon);
